@@ -5,8 +5,8 @@ import "@/app/globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Closed",
-  description: "Website will be online soon.",
+  title: "Clement's Duvivier Website",
+  description: "Website currently under construction",
 };
 
 export default function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
