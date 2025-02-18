@@ -5,12 +5,12 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="
-      h-screen 
+      h-screen
       w-screen
-      flex flex-col 
-      items-center 
-      justify-center 
-      bg-[url('@/public/bg.jpeg')] bg-cover bg-center bg-no-repeat
+      flex flex-col
+      items-center
+      justify-center
+      bg-[url(/bg.jpeg)] bg-cover bg-center bg-no-repeat
       text-white
       tracking-tight
     "
@@ -21,7 +21,7 @@ export default function Home() {
           New Year. New me.
         </h1>
         <h5 className="xl:text-3xl sm:text-2xl font-semibold">
-          I'll be back soon.. (promise)
+          I&apos;ll be back soon.. (promise)
         </h5>
         <button>
           <Link href="" className="px-5 py-3 rounded-full bg-white/5 hover:bg-white/15">Resume</Link>
