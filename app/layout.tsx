@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -25,6 +26,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+          <meta charSet="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          {/* Open Graph Meta Tags */}
+          <meta property="og:title" content="Clément Duvivier" />
+          <meta property="og:description" content="Hi, I'm Clément Duvivier, a Product Owner at Dipeeo and entrepreneur based in Paris, France." />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://clementduvivier.com" />
+          <meta property="og:image" content="/meta_image_picture.jpg" />
+
+          {/* Twitter Card Meta Tags */}
+          <meta name="twitter:title" content="Clément Duvivier" />
+          <meta name="twitter:description" content="Hi, I'm Clément Duvivier, a Product Owner at Dipeeo and entrepreneur based in Paris, France." />
+          <meta name="twitter:image" content="/meta_image_picture.jpg" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
