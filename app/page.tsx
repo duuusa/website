@@ -24,7 +24,7 @@ export default function Home() {
           I&apos;ll be back soon.. (promise)
         </h5>
         <button>
-          <Link href="" className="px-5 py-3 rounded-full bg-white/5 hover:bg-white/15">Resume</Link>
+          <Link href="https://drive.google.com/file/d/1ff60CzkB_cJuG69K4ypxAEsc2iPPTner/view?usp=sharing" className="px-5 py-3 rounded-full bg-white/5 hover:bg-white/15">Resume</Link>
         </button>
       </main>
       <footer className=" p-5 fixed bottom-0 left-0 flex flex-wrap justify-between text-xs font-tight w-full">
