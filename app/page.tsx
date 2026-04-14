@@ -35,17 +35,10 @@ export default function Home() {
             Resume
           </Link>
         </main>
-
         <footer className="mt-8 flex w-full flex-col items-center justify-between gap-4 text-xs sm:flex-row sm:items-end sm:text-sm">
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            <Link href={links.social.bento} className="hover:underline">
-              bento
-            </Link>
             <Link href={links.social.linkedin} className="hover:underline">
               linkedIn
-            </Link>
-            <Link href={links.social.x} className="hover:underline">
-              x (formerly twitter)
             </Link>
           </div>
           <p className="text-center text-gray-300">©{new Date().getFullYear()} clément duvivier</p>
