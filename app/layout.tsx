@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_JP, Noto_Sans_SC } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { htmlLang } from "@/lib/i18n/config";
@@ -29,8 +29,15 @@ const notoSC = Noto_Sans_SC({
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
-  return buildPageMetadata(locale);
+  return buildPageMetadata(locale, "/");
 }
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#ffffff",
+  colorScheme: "light",
+};
 
 export default async function RootLayout({
   children,

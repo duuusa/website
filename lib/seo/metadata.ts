@@ -1,12 +1,30 @@
 import type { Metadata } from "next";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/config";
-import { locales, htmlLang } from "@/lib/i18n/config";
+import { defaultLocale, locales, htmlLang } from "@/lib/i18n/config";
 
 const siteUrl = "https://www.clementduvivier.com";
 
-export function buildPageMetadata(locale: Locale): Metadata {
+function localeUrl(locale: Locale, path: string): string {
+  const suffix = path === "/" ? "" : path;
+  return `${siteUrl}/${locale}${suffix}`;
+}
+
+function languageAlternates(path: string): Record<string, string> {
+  const map: Record<string, string> = {};
+  for (const loc of locales) {
+    map[htmlLang[loc]] = localeUrl(loc, path);
+  }
+  map["x-default"] = localeUrl(defaultLocale, path);
+  return map;
+}
+
+export function buildPageMetadata(locale: Locale, path: string = "/"): Metadata {
   const dictionary = getDictionary(locale);
+  const canonical = localeUrl(locale, path);
+  const alternateLocales = locales
+    .filter((loc) => loc !== locale)
+    .map((loc) => htmlLang[loc].replace("-", "_"));
 
   return {
     metadataBase: new URL(siteUrl),
@@ -16,17 +34,16 @@ export function buildPageMetadata(locale: Locale): Metadata {
     authors: [{ name: "Clément Duvivier", url: siteUrl }],
     creator: "Clément Duvivier",
     alternates: {
-      canonical: siteUrl,
-      languages: Object.fromEntries(
-        locales.map((loc) => [htmlLang[loc], `${siteUrl}/?lang=${loc}`]),
-      ),
+      canonical,
+      languages: languageAlternates(path),
     },
     openGraph: {
       title: dictionary.meta.title,
       description: dictionary.meta.description,
       type: "website",
-      url: siteUrl,
+      url: canonical,
       locale: htmlLang[locale].replace("-", "_"),
+      alternateLocale: alternateLocales,
       siteName: dictionary.meta.title,
       images: [
         {
@@ -42,6 +59,10 @@ export function buildPageMetadata(locale: Locale): Metadata {
       title: dictionary.meta.title,
       description: dictionary.meta.description,
       images: ["/meta_image_picture.jpg"],
+    },
+    icons: {
+      icon: "/favicon.ico",
+      apple: "/meta_image_picture.jpg",
     },
     robots: {
       index: true,

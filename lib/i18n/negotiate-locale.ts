@@ -1,4 +1,4 @@
-import { defaultLocale, isLocale, type Locale } from "./config";
+import { defaultLocale, type Locale } from "./config";
 
 function normalizeLanguageTag(tag: string): string {
   return tag.trim().toLowerCase().split(";")[0] ?? tag;
@@ -28,16 +28,4 @@ export function negotiateLocale(acceptLanguage: string | null): Locale {
   }
 
   return defaultLocale;
-}
-
-export function localeFromQuery(value: string | null): Locale | null {
-  if (!value) return null;
-  const normalized = value.toLowerCase();
-  if (isLocale(normalized)) return normalized;
-  if (normalized === "jp") return "ja";
-  if (normalized === "fra") return "fr";
-  if (normalized === "cn" || normalized === "zh-cn" || normalized === "zh-hans") {
-    return "zh";
-  }
-  return null;
 }

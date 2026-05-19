@@ -1,19 +1,36 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { FadeIn } from "@/components/fade-in";
+import { isLocale, locales, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { getLocale } from "@/lib/i18n/get-locale";
 import { links } from "@/lib/links";
 import { buildThanksMetadata } from "@/lib/seo/metadata";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
+type Params = { locale: string };
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
   return buildThanksMetadata(locale);
 }
 
-export default async function ThanksPage() {
-  const locale = await getLocale();
-  const t = getDictionary(locale);
+export default async function ThanksPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const t = getDictionary(locale as Locale);
 
   return (
     <div className="min-h-screen bg-white text-black">
@@ -71,7 +88,7 @@ export default async function ThanksPage() {
                         </Link>
                       ) : (
                         <Link
-                          href="https://www.clementduvivier.com"
+                          href={`/${locale}`}
                           className="text-sm tracking-[-0.01em] text-[#101828] underline-offset-4 hover:underline"
                         >
                           {item.name}
@@ -88,7 +105,7 @@ export default async function ThanksPage() {
 
         <FadeIn delayMs={640}>
           <footer className="mt-12 text-sm tracking-[-0.01em] text-black/45">
-            <Link href="/" className="hover:text-black">
+            <Link href={`/${locale}`} className="hover:text-black">
               {t.thanks.backHome}
             </Link>
           </footer>

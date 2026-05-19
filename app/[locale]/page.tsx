@@ -1,12 +1,36 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { FadeIn } from "@/components/fade-in";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { LogoMark } from "@/components/logo-mark";
+import { isLocale, locales, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { getLocale } from "@/lib/i18n/get-locale";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export default async function Home() {
-  const locale = await getLocale();
-  const t = getDictionary(locale);
+type Params = { locale: string };
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return buildPageMetadata(locale, "/");
+}
+
+export default async function Home({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const t = getDictionary(locale as Locale);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-4 py-10 sm:px-6">
@@ -31,7 +55,7 @@ export default async function Home() {
 
         <FadeIn delayMs={520}>
           <footer>
-            <LocaleSwitcher currentLocale={locale} />
+            <LocaleSwitcher currentLocale={locale as Locale} pathname="/" />
           </footer>
         </FadeIn>
       </section>

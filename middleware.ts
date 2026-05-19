@@ -1,43 +1,53 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { isLocale } from "@/lib/i18n/config";
-import { localeFromQuery, negotiateLocale } from "@/lib/i18n/negotiate-locale";
+import { isLocale, locales } from "@/lib/i18n/config";
+import { negotiateLocale } from "@/lib/i18n/negotiate-locale";
+
+const PUBLIC_FILE = /\.[^/]+$/;
 
 export function middleware(request: NextRequest) {
-  const queryLocale = localeFromQuery(request.nextUrl.searchParams.get("lang"));
+  const { pathname } = request.nextUrl;
+
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname === "/favicon.ico" ||
+    pathname === "/robots.txt" ||
+    pathname === "/sitemap.xml" ||
+    PUBLIC_FILE.test(pathname)
+  ) {
+    return NextResponse.next();
+  }
+
+  const segments = pathname.split("/").filter(Boolean);
+  const first = segments[0];
+
+  if (first && isLocale(first)) {
+    const response = NextResponse.next();
+    response.headers.set("x-locale", first);
+    if (request.cookies.get("locale")?.value !== first) {
+      response.cookies.set("locale", first, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365,
+        sameSite: "lax",
+      });
+    }
+    return response;
+  }
+
   const cookieLocale = request.cookies.get("locale")?.value;
-  const locale =
-    queryLocale ??
-    (cookieLocale && isLocale(cookieLocale) ? cookieLocale : null) ??
-    negotiateLocale(request.headers.get("accept-language"));
+  const target =
+    cookieLocale && isLocale(cookieLocale)
+      ? cookieLocale
+      : negotiateLocale(request.headers.get("accept-language"));
 
-  const response = NextResponse.next();
-  response.headers.set("x-locale", locale);
-
-  if (cookieLocale !== locale) {
-    response.cookies.set("locale", locale, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: "lax",
-    });
-  }
-
-  if (queryLocale) {
-    const cleanUrl = request.nextUrl.clone();
-    cleanUrl.searchParams.delete("lang");
-    const redirect = NextResponse.redirect(cleanUrl);
-    redirect.headers.set("x-locale", locale);
-    redirect.cookies.set("locale", locale, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: "lax",
-    });
-    return redirect;
-  }
-
-  return response;
+  const url = request.nextUrl.clone();
+  url.pathname = `/${target}${pathname === "/" ? "" : pathname}`;
+  return NextResponse.redirect(url);
 }
 
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };
+
+export const supportedLocales = locales;
