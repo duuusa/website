@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { notFound } from "next/navigation";
 import { Inter, Noto_Sans_JP, Noto_Sans_SC } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { htmlLang } from "@/lib/i18n/config";
-import { getLocale } from "@/lib/i18n/get-locale";
+import { htmlLang, isLocale, locales, type Locale } from "@/lib/i18n/config";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { buildPersonJsonLd } from "@/lib/seo/json-ld";
-import "./globals.css";
+import "../globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,8 +27,19 @@ const notoSC = Noto_Sans_SC({
   variable: "--font-noto-sc",
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
+type Params = { locale: string };
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
   return buildPageMetadata(locale, "/");
 }
 
@@ -39,23 +50,27 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-export default async function RootLayout({
+export default async function LocaleLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<Params>;
 }>) {
-  const locale = await getLocale();
-  const jsonLd = buildPersonJsonLd(locale);
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const typedLocale = locale as Locale;
+  const jsonLd = buildPersonJsonLd(typedLocale);
 
   const fontClass =
-    locale === "ja"
+    typedLocale === "ja"
       ? notoJP.className
-      : locale === "zh"
+      : typedLocale === "zh"
         ? notoSC.className
         : inter.className;
 
   return (
-    <html lang={htmlLang[locale]}>
+    <html lang={htmlLang[typedLocale]}>
       <body
         className={`${inter.variable} ${notoJP.variable} ${notoSC.variable} ${fontClass} antialiased`}
       >

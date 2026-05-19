@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { isLocale, locales } from "@/lib/i18n/config";
+import { isLocale } from "@/lib/i18n/config";
 import { negotiateLocale } from "@/lib/i18n/negotiate-locale";
 
 const PUBLIC_FILE = /\.[^/]+$/;
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (
@@ -24,7 +24,6 @@ export function middleware(request: NextRequest) {
 
   if (first && isLocale(first)) {
     const response = NextResponse.next();
-    response.headers.set("x-locale", first);
     if (request.cookies.get("locale")?.value !== first) {
       response.cookies.set("locale", first, {
         path: "/",
@@ -49,5 +48,3 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };
-
-export const supportedLocales = locales;

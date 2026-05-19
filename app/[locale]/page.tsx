@@ -1,26 +1,14 @@
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FadeIn } from "@/components/fade-in";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { LogoMark } from "@/components/logo-mark";
 import { isLocale, locales, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { buildPageMetadata } from "@/lib/seo/metadata";
 
 type Params = { locale: string };
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<Params>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  if (!isLocale(locale)) return {};
-  return buildPageMetadata(locale, "/");
 }
 
 export default async function Home({
