@@ -3,15 +3,17 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useRef } from "react";
+import type { Locale } from "@/lib/i18n/config";
 
 const EASTER_EGG_CLICKS = 5;
 const EASTER_EGG_WINDOW_MS = 2500;
 
 type LogoMarkProps = {
   alt: string;
+  locale: Locale;
 };
 
-export function LogoMark({ alt }: LogoMarkProps) {
+export function LogoMark({ alt, locale }: LogoMarkProps) {
   const router = useRouter();
   const clickTimestamps = useRef<number[]>([]);
 
@@ -26,9 +28,9 @@ export function LogoMark({ alt }: LogoMarkProps) {
 
     if (recentClicks.length >= EASTER_EGG_CLICKS) {
       clickTimestamps.current = [];
-      router.push("/thanks");
+      router.push(`/${locale}/thanks`);
     }
-  }, [router]);
+  }, [router, locale]);
 
   return (
     <button
@@ -38,7 +40,7 @@ export function LogoMark({ alt }: LogoMarkProps) {
       aria-label={alt}
     >
       <Image
-        src="/signature.png"
+        src="/logo.svg"
         alt=""
         width={150}
         height={64}

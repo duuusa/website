@@ -25,7 +25,7 @@ export default async function Home({
       <section className="flex w-full max-w-[600px] flex-col gap-[25px]">
         <FadeIn>
           <header className="flex flex-col gap-2.5">
-            <LogoMark alt={t.home.logoAlt} />
+            <LogoMark alt={t.home.logoAlt} locale={locale as Locale} />
             <h1 className="text-base font-medium tracking-[-0.05em] text-black">{t.home.name}</h1>
             <p className="text-base tracking-[-0.05em] text-black/50">{t.home.location}</p>
           </header>
