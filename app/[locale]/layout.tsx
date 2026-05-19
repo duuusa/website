@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { Inter, Noto_Sans_JP, Noto_Sans_SC } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import { htmlLang, isLocale, locales, type Locale } from "@/lib/i18n/config";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { buildPersonJsonLd } from "@/lib/seo/json-ld";
@@ -79,6 +80,7 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
+        <Analytics />
         <SpeedInsights />
       </body>
     </html>
