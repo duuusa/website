@@ -1,50 +1,63 @@
 import type { Metadata } from "next";
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Noto_Sans_JP, Noto_Sans_SC } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { htmlLang } from "@/lib/i18n/config";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { buildPersonJsonLd } from "@/lib/seo/json-ld";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const notoJP = Noto_Sans_JP({
   subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+  variable: "--font-noto-jp",
 });
 
-export const metadata: Metadata = {
-  title: "Clément Duvivier",
-  description: "Hi, I'm Clément Duvivier, a Product Owner at Dipeeo and entrepreneur based in Paris, France.",
-};
+const notoSC = Noto_Sans_SC({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+  variable: "--font-noto-sc",
+});
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return buildPageMetadata(locale);
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <head>
-          <meta charSet="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          {/* Open Graph Meta Tags */}
-          <meta property="og:title" content="Clément Duvivier" />
-          <meta property="og:description" content="Hi, I'm Clément Duvivier, a Product Owner at Dipeeo and entrepreneur based in Paris, France." />
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://clementduvivier.com" />
-          <meta property="og:image" content="@/public/meta_image_picture.jpg" />
+  const locale = await getLocale();
+  const jsonLd = buildPersonJsonLd(locale);
 
-          {/* Twitter Card Meta Tags */}
-          <meta name="twitter:title" content="Clément Duvivier" />
-          <meta name="twitter:description" content="Hi, I'm Clément Duvivier, a Product Owner at Dipeeo and entrepreneur based in Paris, France." />
-          <meta name="twitter:image" content="@/public/meta_image_picture.jpg" />
-      </head>
+  const fontClass =
+    locale === "ja"
+      ? notoJP.className
+      : locale === "zh"
+        ? notoSC.className
+        : inter.className;
+
+  return (
+    <html lang={htmlLang[locale]}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${notoJP.variable} ${notoSC.variable} ${fontClass} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {children}
-        <SpeedInsights/>
+        <SpeedInsights />
       </body>
     </html>
   );

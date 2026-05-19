@@ -1,49 +1,40 @@
-import Image from "next/image";
-import Logo from "@/public/logo.png";
-import Link from "next/link";
-import { links } from "@/lib/links";
+import { FadeIn } from "@/components/fade-in";
+import { LocaleSwitcher } from "@/components/locale-switcher";
+import { LogoMark } from "@/components/logo-mark";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
 
-export default function Home() {
+export default async function Home() {
+  const locale = await getLocale();
+  const t = getDictionary(locale);
+
   return (
-    <div
-      className="
-        min-h-screen
-        w-full
-        bg-[url(/bg.jpeg)] bg-cover bg-center bg-no-repeat
-        text-white
-        tracking-tight
-      "
-    >
-      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-8 sm:px-6 md:px-10">
-        <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-6 text-center sm:gap-8">
-          <Image
-            src={Logo}
-            className="h-auto w-36 sm:w-48 md:w-64 lg:w-80"
-            alt="logo from the website draw by Clément Duvivier"
-            priority
-          />
-          <h1 className="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
-          New Year. New me.
-          </h1>
-          <h5 className="text-lg font-semibold sm:text-xl md:text-2xl lg:text-3xl">
-            I&apos;ll be back soon.. (promise)
-          </h5>
-          <Link
-            href={links.resume}
-            className="rounded-full bg-white/5 px-5 py-3 text-sm font-medium transition-colors hover:bg-white/15 sm:text-base"
-          >
-            Resume
-          </Link>
-        </main>
-        <footer className="mt-8 flex w-full flex-col items-center justify-between gap-4 text-xs sm:flex-row sm:items-end sm:text-sm">
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            <Link href={links.social.linkedin} className="hover:underline">
-              linkedIn
-            </Link>
-          </div>
-          <p className="text-center text-gray-300">©{new Date().getFullYear()} clément duvivier</p>
-        </footer>
-      </div>
+    <div className="flex min-h-screen items-center justify-center bg-white px-4 py-10 sm:px-6">
+      <section className="flex w-full max-w-[600px] flex-col gap-[25px]">
+        <FadeIn>
+          <header className="flex flex-col gap-2.5">
+            <LogoMark alt={t.home.logoAlt} />
+            <h1 className="text-base font-medium tracking-[-0.05em] text-black">{t.home.name}</h1>
+            <p className="text-base tracking-[-0.05em] text-black/50">{t.home.location}</p>
+          </header>
+        </FadeIn>
+
+        <div className="flex flex-col gap-[15px]">
+          {t.home.bio.map((paragraph, index) => (
+            <FadeIn key={paragraph.slice(0, 24)} delayMs={180 + index * 140}>
+              <p className="text-base leading-normal tracking-[-0.01em] text-[#101828]">
+                {paragraph}
+              </p>
+            </FadeIn>
+          ))}
+        </div>
+
+        <FadeIn delayMs={520}>
+          <footer>
+            <LocaleSwitcher currentLocale={locale} />
+          </footer>
+        </FadeIn>
+      </section>
     </div>
   );
 }
