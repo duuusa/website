@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { FadeIn } from "@/components/fade-in";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { LogoMark } from "@/components/logo-mark";
+import { RichText } from "@/components/rich-text";
 import { isLocale, locales, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -18,16 +19,24 @@ export default async function Home({
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  const t = getDictionary(locale as Locale);
+  const typedLocale = locale as Locale;
+  const t = getDictionary(typedLocale);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-4 py-10 sm:px-6">
-      <section className="flex w-full max-w-[600px] flex-col gap-[25px]">
+      <section
+        key={typedLocale}
+        className="flex w-full max-w-[600px] flex-col gap-[25px]"
+      >
         <FadeIn>
           <header className="flex flex-col gap-2.5">
-            <LogoMark alt={t.home.logoAlt} locale={locale as Locale} />
-            <h1 className="text-base font-medium tracking-[-0.05em] text-black">{t.home.name}</h1>
-            <p className="text-base tracking-[-0.05em] text-black/50">{t.home.location}</p>
+            <LogoMark alt={t.home.logoAlt} locale={typedLocale} />
+            <h1 className="text-base font-medium tracking-[-0.05em] text-black">
+              {t.home.name}
+            </h1>
+            <p className="text-base tracking-[-0.05em] text-black/50">
+              <RichText text={t.home.location} locale={typedLocale} />
+            </p>
           </header>
         </FadeIn>
 
@@ -35,7 +44,7 @@ export default async function Home({
           {t.home.bio.map((paragraph, index) => (
             <FadeIn key={paragraph.slice(0, 24)} delayMs={180 + index * 140}>
               <p className="text-base leading-normal tracking-[-0.01em] text-[#101828]">
-                {paragraph}
+                <RichText text={paragraph} locale={typedLocale} />
               </p>
             </FadeIn>
           ))}
@@ -43,7 +52,7 @@ export default async function Home({
 
         <FadeIn delayMs={520}>
           <footer>
-            <LocaleSwitcher currentLocale={locale as Locale} pathname="/" />
+            <LocaleSwitcher currentLocale={typedLocale} pathname="/" />
           </footer>
         </FadeIn>
       </section>
