@@ -1,70 +1,72 @@
 import type { Locale } from "@/lib/i18n/config";
 
-export type RichVariant =
-  | "default"
-  | "code"
-  | "frame"
-  | "flash"
-  | "highlight"
-  | "terminal"
-  | "url"
-  | "ticket";
+export type RichTone = "muted" | "strong";
 
 export type RichToken =
-  | { type: "link"; text: string; href: string; external?: boolean }
   | {
-      type: "emoji";
+      type: "link";
       text: string;
-      emoji: string;
-      variant?: RichVariant;
+      href: string;
+      external?: boolean;
+      glyph: string;
+    }
+  | {
+      type: "mark";
+      text: string;
+      glyph?: string;
+      tone?: RichTone;
+      script?: boolean;
     };
 
 export type RichPart = { kind: "text"; text: string } | { kind: "token"; token: RichToken };
 
+// Editorial keyword treatment à la Los Feliz Engineering: muted words trailed by
+// a small monochrome dingbat, a couple of strong (highlighted) words, and one in
+// a script italic. Glyphs are unicode so they inherit the text colour.
 const richTokensByLocale: Record<Locale, RichToken[]> = {
   en: [
-    { type: "link", text: "Dipeeo", href: "https://dipeeo.com/", external: true },
-    { type: "emoji", text: "Product Owner", emoji: "🧭", variant: "ticket" },
-    { type: "emoji", text: "computer science", emoji: "💻", variant: "terminal" },
-    { type: "emoji", text: "web development", emoji: "🌐", variant: "url" },
-    { type: "emoji", text: "photographer", emoji: "📷", variant: "flash" },
-    { type: "emoji", text: "developer", emoji: "⌨️", variant: "code" },
-    { type: "emoji", text: "designer", emoji: "🎨", variant: "frame" },
-    { type: "emoji", text: "Paris", emoji: "🥐", variant: "highlight" },
-    { type: "emoji", text: "HETIC", emoji: "🎓", variant: "highlight" },
+    { type: "link", text: "Dipeeo", href: "https://dipeeo.com/", external: true, glyph: "☞" },
+    { type: "mark", text: "Product Owner", tone: "strong", glyph: "❖" },
+    { type: "mark", text: "computer science", tone: "muted", glyph: "◎" },
+    { type: "mark", text: "web development", tone: "muted", glyph: "❂" },
+    { type: "mark", text: "developer", tone: "muted", glyph: "✦" },
+    { type: "mark", text: "designer", tone: "muted", glyph: "✎" },
+    { type: "mark", text: "photographer", tone: "muted", glyph: "◉" },
+    { type: "mark", text: "HETIC", tone: "muted", glyph: "✺" },
+    { type: "mark", text: "Paris", script: true },
   ],
   fr: [
-    { type: "link", text: "Dipeeo", href: "https://dipeeo.com/", external: true },
-    { type: "emoji", text: "Product Owner", emoji: "🧭", variant: "ticket" },
-    { type: "emoji", text: "informatique", emoji: "💻", variant: "terminal" },
-    { type: "emoji", text: "développement web", emoji: "🌐", variant: "url" },
-    { type: "emoji", text: "photographe", emoji: "📷", variant: "flash" },
-    { type: "emoji", text: "développeur", emoji: "⌨️", variant: "code" },
-    { type: "emoji", text: "designer", emoji: "🎨", variant: "frame" },
-    { type: "emoji", text: "Paris", emoji: "🥐", variant: "highlight" },
-    { type: "emoji", text: "HETIC", emoji: "🎓", variant: "highlight" },
+    { type: "link", text: "Dipeeo", href: "https://dipeeo.com/", external: true, glyph: "☞" },
+    { type: "mark", text: "Product Owner", tone: "strong", glyph: "❖" },
+    { type: "mark", text: "informatique", tone: "muted", glyph: "◎" },
+    { type: "mark", text: "développement web", tone: "muted", glyph: "❂" },
+    { type: "mark", text: "développeur", tone: "muted", glyph: "✦" },
+    { type: "mark", text: "designer", tone: "muted", glyph: "✎" },
+    { type: "mark", text: "photographe", tone: "muted", glyph: "◉" },
+    { type: "mark", text: "HETIC", tone: "muted", glyph: "✺" },
+    { type: "mark", text: "Paris", script: true },
   ],
   ja: [
-    { type: "link", text: "Dipeeo", href: "https://dipeeo.com/", external: true },
-    { type: "emoji", text: "プロダクトオーナー", emoji: "🧭", variant: "ticket" },
-    { type: "emoji", text: "コンピュータサイエンス", emoji: "💻", variant: "terminal" },
-    { type: "emoji", text: "ウェブ開発", emoji: "🌐", variant: "url" },
-    { type: "emoji", text: "写真家", emoji: "📷", variant: "flash" },
-    { type: "emoji", text: "開発者", emoji: "⌨️", variant: "code" },
-    { type: "emoji", text: "デザイナー", emoji: "🎨", variant: "frame" },
-    { type: "emoji", text: "Paris", emoji: "🥐", variant: "highlight" },
-    { type: "emoji", text: "HETIC", emoji: "🎓", variant: "highlight" },
+    { type: "link", text: "Dipeeo", href: "https://dipeeo.com/", external: true, glyph: "☞" },
+    { type: "mark", text: "プロダクトオーナー", tone: "strong", glyph: "❖" },
+    { type: "mark", text: "コンピュータサイエンス", tone: "muted", glyph: "◎" },
+    { type: "mark", text: "ウェブ開発", tone: "muted", glyph: "❂" },
+    { type: "mark", text: "開発者", tone: "muted", glyph: "✦" },
+    { type: "mark", text: "デザイナー", tone: "muted", glyph: "✎" },
+    { type: "mark", text: "写真家", tone: "muted", glyph: "◉" },
+    { type: "mark", text: "HETIC", tone: "muted", glyph: "✺" },
+    { type: "mark", text: "Paris", script: true },
   ],
   zh: [
-    { type: "link", text: "Dipeeo", href: "https://dipeeo.com/", external: true },
-    { type: "emoji", text: "产品负责人", emoji: "🧭", variant: "ticket" },
-    { type: "emoji", text: "计算机科学", emoji: "💻", variant: "terminal" },
-    { type: "emoji", text: "Web 开发", emoji: "🌐", variant: "url" },
-    { type: "emoji", text: "摄影师", emoji: "📷", variant: "flash" },
-    { type: "emoji", text: "开发者", emoji: "⌨️", variant: "code" },
-    { type: "emoji", text: "设计师", emoji: "🎨", variant: "frame" },
-    { type: "emoji", text: "Paris", emoji: "🥐", variant: "highlight" },
-    { type: "emoji", text: "HETIC", emoji: "🎓", variant: "highlight" },
+    { type: "link", text: "Dipeeo", href: "https://dipeeo.com/", external: true, glyph: "☞" },
+    { type: "mark", text: "产品负责人", tone: "strong", glyph: "❖" },
+    { type: "mark", text: "计算机科学", tone: "muted", glyph: "◎" },
+    { type: "mark", text: "Web 开发", tone: "muted", glyph: "❂" },
+    { type: "mark", text: "开发者", tone: "muted", glyph: "✦" },
+    { type: "mark", text: "设计师", tone: "muted", glyph: "✎" },
+    { type: "mark", text: "摄影师", tone: "muted", glyph: "◉" },
+    { type: "mark", text: "HETIC", tone: "muted", glyph: "✺" },
+    { type: "mark", text: "Paris", script: true },
   ],
 };
 

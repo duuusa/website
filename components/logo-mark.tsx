@@ -36,6 +36,7 @@ export function LogoMark({ alt, locale }: LogoMarkProps) {
     <button
       type="button"
       onClick={handleClick}
+      data-logo-mark
       className="relative block h-16 w-[150px] shrink-0 cursor-pointer border-0 bg-transparent p-0"
       aria-label={alt}
     >
