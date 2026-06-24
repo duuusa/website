@@ -20,6 +20,13 @@
     color: #101828;
   }
 
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: #0b0b0d;
+      color: #e8e8ea;
+    }
+  }
+
   a {
     text-decoration: none;
   }
@@ -37,6 +44,18 @@
     background: rgba(17, 24, 39, 0.13);
     color: #0a0a0a;
     text-shadow: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    ::selection {
+      background: rgba(232, 232, 234, 0.22);
+      color: #ffffff;
+      text-shadow: none;
+    }
+    ::-moz-selection {
+      background: rgba(232, 232, 234, 0.22);
+      color: #ffffff;
+      text-shadow: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -90,6 +109,11 @@
        slot, so the page is never revealed under a full-size signature. */
     transition: background-color 750ms cubic-bezier(0.22, 1, 0.36, 1);
   }
+  @media (prefers-color-scheme: dark) {
+    .splash-intro {
+      background-color: #0b0b0d;
+    }
+  }
   .splash-intro--reveal {
     background-color: transparent;
   }
@@ -130,6 +154,12 @@
     animation: splash-draw 2200ms cubic-bezier(0.37, 0, 0.63, 1) forwards;
     transition: transform 950ms cubic-bezier(0.65, 0, 0.35, 1);
     will-change: mask-position, transform;
+  }
+  /* The signature ink is black; invert it to white on a dark field. */
+  @media (prefers-color-scheme: dark) {
+    .splash-intro__signature {
+      filter: invert(1);
+    }
   }
 
   html.splash-skip .splash-intro {
@@ -223,6 +253,41 @@
     }
     .kw--link:hover .kw__text {
       background: rgba(16, 24, 40, 0.14);
+    }
+  }
+
+  /* Dark mode: lift the muted greys onto a dark field and lighten the pills. */
+  @media (prefers-color-scheme: dark) {
+    .kw {
+      color: rgba(232, 232, 234, 0.5);
+    }
+    .kw__glyph {
+      color: rgba(232, 232, 234, 0.45);
+    }
+    .kw--strong .kw__text {
+      color: #f5f5f7;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .kw--link .kw__text {
+      background: rgba(255, 255, 255, 0.13);
+    }
+    .kw--script {
+      color: rgba(232, 232, 234, 0.62);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .kw:hover .kw__text {
+        color: #ffffff;
+      }
+      .kw:hover .kw__glyph {
+        color: rgba(232, 232, 234, 0.85);
+      }
+      .kw--strong:hover .kw__text {
+        background: rgba(255, 255, 255, 0.16);
+      }
+      .kw--link:hover .kw__text {
+        background: rgba(255, 255, 255, 0.2);
+      }
     }
   }
 }

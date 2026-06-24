@@ -13,15 +13,19 @@ export function LocaleSwitcher({ currentLocale, pathname = "/" }: LocaleSwitcher
   return (
     <nav
       aria-label="Language"
-      className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs tracking-[-0.01em] text-black/35"
+      className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs tracking-[-0.01em] text-black/35 dark:text-white/35"
     >
       {entries.map(([locale, label], index) => (
         <span key={locale} className="flex items-center gap-3">
           {index > 0 ? <span aria-hidden="true">·</span> : null}
           {locale === currentLocale ? (
-            <span className="text-black/60">{label}</span>
+            <span className="text-black/60 dark:text-white/70">{label}</span>
           ) : (
-            <Link href={`/${locale}${suffix}`} className="hover:text-black" hrefLang={locale}>
+            <Link
+              href={`/${locale}${suffix}`}
+              className="hover:text-black dark:hover:text-white"
+              hrefLang={locale}
+            >
               {label}
             </Link>
           )}

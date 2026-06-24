@@ -45,7 +45,7 @@ export function LogoMark({ alt, locale }: LogoMarkProps) {
         alt=""
         width={150}
         height={64}
-        className="h-16 w-[150px] object-contain object-left object-bottom"
+        className="h-16 w-[150px] object-contain object-left object-bottom dark:invert"
         priority
         unoptimized
       />

@@ -27,7 +27,7 @@ export default async function Home({
   const t = getDictionary(typedLocale);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white px-4 py-10 sm:px-6">
+    <div className="flex min-h-screen items-center justify-center bg-white px-4 py-10 sm:px-6 dark:bg-[#0b0b0d]">
       <section
         key={typedLocale}
         className="flex w-full max-w-[600px] flex-col gap-[25px]"
@@ -35,13 +35,13 @@ export default async function Home({
         <header className="flex flex-col gap-2.5">
           <LogoMark alt={t.home.logoAlt} locale={typedLocale} />
           <h1
-            className="reveal-item text-base font-medium tracking-[-0.05em] text-black"
+            className="reveal-item text-base font-medium tracking-[-0.05em] text-black dark:text-white"
             style={enterDelay(0)}
           >
             {t.home.name}
           </h1>
           <p
-            className="reveal-item text-base tracking-[-0.05em] text-black/50"
+            className="reveal-item text-base tracking-[-0.05em] text-black/50 dark:text-white/50"
             style={enterDelay(90)}
           >
             <RichText text={t.home.location} locale={typedLocale} />
@@ -52,7 +52,7 @@ export default async function Home({
           {t.home.bio.map((paragraph, index) => (
             <p
               key={paragraph.slice(0, 24)}
-              className="reveal-item font-serif text-[19px] leading-[1.72] tracking-[0] text-[#101828]"
+              className="reveal-item font-serif text-[19px] leading-[1.72] tracking-[0] text-[#101828] dark:text-[#e8e8ea]"
               style={enterDelay(200 + index * 120)}
             >
               <RichText text={paragraph} locale={typedLocale} />
