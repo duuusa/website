@@ -19,8 +19,9 @@ export function SplashIntro() {
     if (typeof window === "undefined") return;
 
     // If the inline script already gated us (skip class on <html>), bail.
+    // The overlay is already hidden by CSS (html.splash-skip .splash-intro),
+    // so there's no state to change — just don't start the sequence.
     if (document.documentElement.classList.contains("splash-skip")) {
-      setPhase("done");
       return;
     }
 
